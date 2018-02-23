@@ -11,9 +11,13 @@ export class AgendamentoService {
         private _dao: AgendamentoDao
     ) {}
 
+    private _montaUri(agendamento: Agendamento) {
+        return `https://aluracar.herokuapp.com/salvarpedido?carro=${agendamento.carro.nome}&preco=${agendamento.valor}&nome=${agendamento.nome}&endereco=${agendamento.endereco}&email=${agendamento.email}&dataAgendamento=${agendamento.data}`;
+    }
+
     agenda(agendamento: Agendamento) {
 
-        let api = `https://aluracar.herokuapp.com/salvarpedido?carro=${agendamento.carro.nome}&preco=${agendamento.valor}&nome=${agendamento.nome}&endereco=${agendamento.endereco}&email=${agendamento.email}&dataAgendamento=${agendamento.data}`;
+        let api = this._montaUri(agendamento);
         
         return this._dao
         .ehAgendamentoDuplicado(agendamento)
@@ -24,5 +28,17 @@ export class AgendamentoService {
                   .then(() => this._dao.salva(agendamento))
                   .then(() => agendamento.confirmado);
         });
+    }
+
+    reagenda(agendamento: Agendamento) {
+
+        let api = this._montaUri(agendamento);
+        
+        return this._http
+            .get(api)
+            .toPromise()
+            .then(() => agendamento.confirmado = true, err => console.log(err))
+            .then(() => this._dao.salva(agendamento))
+            .then(() => agendamento.confirmado);
     }
 }

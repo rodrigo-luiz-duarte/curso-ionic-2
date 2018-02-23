@@ -8,7 +8,6 @@ import { AgendamentoService } from '../../domain/agendamento/agendamento-service
 
 
 @Component({
-  selector: 'page-cadastro',
   templateUrl: 'cadastro.html'
 })
 export class CadastroPage implements OnInit {
