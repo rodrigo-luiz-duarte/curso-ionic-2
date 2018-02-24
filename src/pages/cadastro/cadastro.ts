@@ -5,7 +5,7 @@ import { Http } from '@angular/http';
 import { HomePage } from '../home/home';
 import { Agendamento } from '../../domain/agendamento/agendamento';
 import { AgendamentoService } from '../../domain/agendamento/agendamento-service';
-
+import { Vibration, DatePicker } from 'ionic-native'; 
 
 @Component({
   templateUrl: 'cadastro.html'
@@ -43,6 +43,7 @@ export class CadastroPage implements OnInit {
 
       if (!this.valideCamposObrigatorios()) {
         this.mostreMensagem('Preenchimento obrigatório', 'Você deve preencher todas as informações');
+        Vibration.vibrate(500);
         return
       }
 
@@ -70,4 +71,13 @@ export class CadastroPage implements OnInit {
       buttons: [{ text: 'OK'}]
     }).present();
   }
+
+  selecionaData() {
+    DatePicker.show({
+      date: new Date(), 
+      mode: 'date'
+    })
+    .then(data => this.agendamento.data = data.toISOString());
+  }
+
 }
